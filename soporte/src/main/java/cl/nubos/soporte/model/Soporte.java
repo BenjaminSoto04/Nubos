@@ -1,9 +1,14 @@
 package cl.nubos.soporte.model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.*;
 
 @Data
 @NoArgsConstructor
@@ -23,8 +28,8 @@ public class Soporte {
     private String descripcion;
 
     @Column(nullable = false)
-    private String estado;
+    private LocalDate fechaReporte;
 
     @Column(nullable = false)
-    private String fechaReporte;
+    private String estado;
 }
