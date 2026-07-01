@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import cl.nubos.biblioteca.dto.UsuarioDto;
 
-@FeignClient(name = "usuario", url = "http://localhost:8082")
+@FeignClient(name = "usuario")
 public interface UsuarioClient {
 
     @GetMapping("/api/v1/usuarios/{id}")

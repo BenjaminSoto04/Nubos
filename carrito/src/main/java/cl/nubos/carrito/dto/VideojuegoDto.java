@@ -11,5 +11,4 @@ public class VideojuegoDto {
     private Integer id;
     private String titulo;
     private Double precio;
-    private Integer stock;
 }

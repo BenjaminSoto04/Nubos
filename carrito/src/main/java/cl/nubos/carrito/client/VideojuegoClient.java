@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.*;
 
 import cl.nubos.carrito.dto.VideojuegoDto;
 
-@FeignClient(name = "videojuego", url = "http://localhost:8083")
+@FeignClient(name = "videojuego")
 public interface VideojuegoClient {
 
     @GetMapping("/api/v1/videojuegos/{id}")

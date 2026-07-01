@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.nubos.soporte.model.Soporte;
 import cl.nubos.soporte.service.SoporteService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/soporte")
+@Tag(name = "Soporte", description = "Operaciones con reportes de soporte")
 public class SoporteController {
 
     @Autowired
     private SoporteService soporteService;
 
     @GetMapping
+    @Operation(summary = "Obtener todos los reportes", description = "Devuelve una lista de todos los reportes")
     public ResponseEntity<List<Soporte>> listarReportes() {
         List<Soporte> reportes = soporteService.getAllReportes();
 
@@ -37,6 +41,7 @@ public class SoporteController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener un reporte por ID", description = "Devuelve un reporte según el ID proporcionado")
     public ResponseEntity<Soporte> obtenerPorId(@PathVariable Integer id) {
         try {
             Soporte reporte = soporteService.getReporteById(id);
@@ -47,6 +52,7 @@ public class SoporteController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear un nuevo reporte", description = "Crea un nuevo reporte de soporte")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Soporte> crearReporte(@RequestBody Soporte soporte) {
         Soporte nuevoReporte = soporteService.crearReporte(soporte);
@@ -54,6 +60,7 @@ public class SoporteController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un reporte por ID", description = "Actualiza un reporte según el ID proporcionado")
     public ResponseEntity<Soporte> actualizarReporte(@PathVariable Integer id, @RequestBody Soporte soporte) {
         try {
             Soporte reporteActualizado = soporteService.actualizarReporte(id, soporte);
@@ -64,6 +71,7 @@ public class SoporteController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un reporte por ID", description = "Elimina un reporte según el ID proporcionado")
     public ResponseEntity<Void> eliminarReporte(@PathVariable Integer id) {
         try {
             soporteService.eliminarReporte(id);

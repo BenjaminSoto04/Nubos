@@ -21,11 +21,16 @@ public class DataLoader {
 
             } else {
 
-                // Se asignan IDs ficticios a desarrolladorId (1 y 2) y categoriaId (1 y 2) en lugar de null,
-                // cumpliendo con la restricción de que estas columnas no pueden ser nulas (nullable = false).
-                Videojuego videojuego1 = new Videojuego(null, "Hollow Knight", "Videojuego de Aventura y acción", 10000.0, LocalDate.parse("2017-02-24"), 1, 1, "E");
-                Videojuego videojuego2 = new Videojuego(null, "Cuphead", "Videojuego de Plataformas y acción", 15000.0, LocalDate.parse("2017-09-29"), 1, 2, "E");
-                Videojuego videojuego3 = new Videojuego(null, "Undertale", "Videojuego de Rol y aventura", 8000.0, LocalDate.parse("2015-09-15"), 2, 1, "E");
+                // Se asignan IDs ficticios a desarrolladorId (1 y 2) y categoriaId (1 y 2) en
+                // lugar de null,
+                // cumpliendo con la restricción de que estas columnas no pueden ser nulas
+                // (nullable = false).
+                Videojuego videojuego1 = new Videojuego(null, "Hollow Knight", "Videojuego de Aventura y acción",
+                        10000.0, LocalDate.parse("2017-02-24"), 1, 1, "E");
+                Videojuego videojuego2 = new Videojuego(null, "Cuphead", "Videojuego de Plataformas y acción", 15000.0,
+                        LocalDate.parse("2017-09-29"), 1, 2, "E");
+                Videojuego videojuego3 = new Videojuego(null, "Undertale", "Videojuego de Rol y aventura", 8000.0,
+                        LocalDate.parse("2015-09-15"), 2, 1, "E");
 
                 videojuegoRepository.save(videojuego1);
                 videojuegoRepository.save(videojuego2);

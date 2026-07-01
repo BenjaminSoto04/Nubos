@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import cl.nubos.promocion.dto.VideojuegoDto;
 
-@FeignClient(name = "videojuego", url = "http://localhost:8083")
+@FeignClient(name = "videojuego")
 public interface VideojuegoClient {
 
     @GetMapping("/api/v1/videojuegos/{id}")

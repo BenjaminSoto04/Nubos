@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import cl.nubos.videojuego.client.CategoriaClient;
 import cl.nubos.videojuego.client.DesarrolladorClient;
+import cl.nubos.videojuego.dto.VideojuegoResponseDto;
 import cl.nubos.videojuego.model.Videojuego;
 import cl.nubos.videojuego.repository.VideojuegoRepository;
 import feign.FeignException;
@@ -25,37 +26,42 @@ public class VideojuegoService {
     @Autowired
     private CategoriaClient categoriaClient;
 
-    public List<Videojuego> listar() {
-        return videojuegoRepository.findAll();
+    public List<VideojuegoResponseDto> listar() {
+        return videojuegoRepository.findAll().stream()
+                .map(this::mapearAVideojuegoResponseDto)
+                .toList();
     }
 
-    public Videojuego buscarPorId(Integer id) {
-        return videojuegoRepository.findById(id)
+    public VideojuegoResponseDto buscarPorId(Integer id) {
+        Videojuego videojuego = videojuegoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
+        return mapearAVideojuegoResponseDto(videojuego);
     }
 
-    public Videojuego crear(Videojuego videojuego) {
-        validarDesarrollador(videojuego.getDesarrolladorId());
-        validarCategoria(videojuego.getCategoriaId());
-        return videojuegoRepository.save(videojuego);
+    public VideojuegoResponseDto crear(Videojuego videojuego) {
+        validarDesarrollador(videojuego.getDesarrollador());
+        validarCategoria(videojuego.getCategoria());
+        Videojuego guardado = videojuegoRepository.save(videojuego);
+        return mapearAVideojuegoResponseDto(guardado);
     }
 
-    public Videojuego actualizar(Integer id, Videojuego videojuegoActualizado) {
+    public VideojuegoResponseDto actualizar(Integer id, Videojuego videojuegoActualizado) {
         Videojuego videojuego = videojuegoRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Videojuego no encontrado"));
 
-        validarDesarrollador(videojuegoActualizado.getDesarrolladorId());
-        validarCategoria(videojuegoActualizado.getCategoriaId());
+        validarDesarrollador(videojuegoActualizado.getDesarrollador());
+        validarCategoria(videojuegoActualizado.getCategoria());
 
         videojuego.setTitulo(videojuegoActualizado.getTitulo());
         videojuego.setDescripcion(videojuegoActualizado.getDescripcion());
         videojuego.setPrecio(videojuegoActualizado.getPrecio());
         videojuego.setFechaLanzamiento(videojuegoActualizado.getFechaLanzamiento());
-        videojuego.setDesarrolladorId(videojuegoActualizado.getDesarrolladorId());
-        videojuego.setCategoriaId(videojuegoActualizado.getCategoriaId());
+        videojuego.setDesarrollador(videojuegoActualizado.getDesarrollador());
+        videojuego.setCategoria(videojuegoActualizado.getCategoria());
         videojuego.setClasificacionEdad(videojuegoActualizado.getClasificacionEdad());
 
-        return videojuegoRepository.save(videojuego);
+        Videojuego guardado = videojuegoRepository.save(videojuego);
+        return mapearAVideojuegoResponseDto(guardado);
     }
 
     public void eliminar(Integer id) {
@@ -65,24 +71,48 @@ public class VideojuegoService {
         videojuegoRepository.deleteById(id);
     }
 
-    private void validarDesarrollador(Integer desarrolladorId) {
+    public VideojuegoResponseDto mapearAVideojuegoResponseDto(Videojuego videojuego) {
+        VideojuegoResponseDto dto = new VideojuegoResponseDto();
+        dto.setId(videojuego.getId());
+        dto.setTitulo(videojuego.getTitulo());
+        dto.setDescripcion(videojuego.getDescripcion());
+        dto.setPrecio(videojuego.getPrecio());
+        dto.setFechaLanzamiento(videojuego.getFechaLanzamiento());
+        dto.setClasificacionEdad(videojuego.getClasificacionEdad());
+
         try {
-            desarrolladorClient.obtenerPorId(desarrolladorId);
+            dto.setDesarrollador(desarrolladorClient.obtenerPorId(videojuego.getDesarrollador()));
+        } catch (Exception e) {
+            dto.setDesarrollador(null);
+        }
+
+        try {
+            dto.setCategoria(categoriaClient.obtenerPorId(videojuego.getCategoria()));
+        } catch (Exception e) {
+            dto.setCategoria(null);
+        }
+
+        return dto;
+    }
+
+    private void validarDesarrollador(Integer desarrollador) {
+        try {
+            desarrolladorClient.obtenerPorId(desarrollador);
         } catch (FeignException.NotFound e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Desarrollador con id " + desarrolladorId + " no existe");
+                    "Desarrollador con id " + desarrollador + " no existe");
         } catch (FeignException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                     "Servicio desarrollador no disponible");
         }
     }
 
-    private void validarCategoria(Integer categoriaId) {
+    private void validarCategoria(Integer categoria) {
         try {
-            categoriaClient.obtenerPorId(categoriaId);
+            categoriaClient.obtenerPorId(categoria);
         } catch (FeignException.NotFound e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Categoria con id " + categoriaId + " no existe");
+                    "Categoria con id " + categoria + " no existe");
         } catch (FeignException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                     "Servicio categoria no disponible");

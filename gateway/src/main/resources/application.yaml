@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      routes:
+        - id: usuarios
+          uri: lb://usuario
+          predicates:
+            - Path=/api/v1/usuarios/**
+        - id: videojuegos
+          uri: lb://videojuego
+          predicates:
+            - Path=/api/v1/videojuegos/**
+        - id: biblioteca
+          uri: lb://biblioteca
+          predicates:
+            - Path=/api/v1/biblioteca/**
+        - id: soporte
+          uri: lb://soporte
+          predicates:
+            - Path=/api/v1/soporte/**
+        - id: desarrollador
+          uri: lb://desarrollador
+          predicates:
+            - Path=/api/v1/desarrolladores/**
+        - id: categoria
+          uri: lb://categoria
+          predicates: 
+            - Path=/api/v1/categorias/**
+        - id: resena
+          uri: lb://resena
+          predicates:
+            - Path=/api/v1/resenas/**
+        - id: carrito
+          uri: lb://carrito
+          predicates:
+            - Path=/api/v1/carrito/**
+        - id: compra
+          uri: lb://compra
+          predicates:
+            - Path=/api/v1/compras/**
+        - id: promocion
+          uri: lb://promocion
+          predicates:
+            - Path=/api/v1/promociones/**
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

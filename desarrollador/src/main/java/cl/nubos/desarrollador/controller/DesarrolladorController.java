@@ -17,15 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.nubos.desarrollador.model.Desarrollador;
 import cl.nubos.desarrollador.service.DesarrolladorService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/desarrolladores")
+@Tag(name = "Desarrollador", description = "Operaciones con desarrolladores")
 public class DesarrolladorController {
 
     @Autowired
     public DesarrolladorService desarrolladorService;
 
     @GetMapping
+    @Operation(summary = "Obtener todos los desarrolladores", description = "Devuelve una lista de todos los desarrolladores")
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Desarrollador>> getAllDesarrolladores() {
         List<Desarrollador> desarrolladores = desarrolladorService.getAllDesarrolladores();
 
@@ -37,6 +42,7 @@ public class DesarrolladorController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener un desarrollador por ID", description = "Devuelve un desarrollador según el ID proporcionado")
     public ResponseEntity<Desarrollador> obtenerPorId(@PathVariable Integer id) {
         try {
             Desarrollador desarrollador = desarrolladorService.getDesarrolladorById(id);
@@ -47,6 +53,7 @@ public class DesarrolladorController {
     }
 
     @PostMapping
+    @Operation(summary = "Agregar un nuevo desarrollador", description = "Agrega un nuevo desarrollador a la base de datos")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Desarrollador> agregarDesarrollador(@RequestBody Desarrollador desarrollador) {
         Desarrollador nuevoDesarrollador = desarrolladorService.createDesarrollador(desarrollador);
@@ -54,7 +61,9 @@ public class DesarrolladorController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Desarrollador> actualizarDesarrollador(@PathVariable Integer id, @RequestBody Desarrollador desarrollador) {
+    @Operation(summary = "Modificar un desarrollador por ID", description = "Modifica un desarrollador según el ID proporcionado")
+    public ResponseEntity<Desarrollador> actualizarDesarrollador(@PathVariable Integer id,
+            @RequestBody Desarrollador desarrollador) {
         try {
             Desarrollador desarrolladorActualizado = desarrolladorService.updateDesarrollador(id, desarrollador);
             return ResponseEntity.ok(desarrolladorActualizado);
@@ -64,6 +73,7 @@ public class DesarrolladorController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un desarrollador por ID", description = "Elimina un desarrollador según el ID proporcionado")
     public ResponseEntity<Void> eliminarDesarrollador(@PathVariable Integer id) {
         try {
             desarrolladorService.deleteDesarrollador(id);

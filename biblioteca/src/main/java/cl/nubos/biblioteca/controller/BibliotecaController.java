@@ -14,19 +14,24 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import cl.nubos.biblioteca.dto.BibliotecaResponseDto;
 import cl.nubos.biblioteca.model.Biblioteca;
 import cl.nubos.biblioteca.service.BibliotecaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/biblioteca")
+@Tag(name = "Biblioteca", description = "API de biblioteca")
 public class BibliotecaController {
 
     @Autowired
     private BibliotecaService bibliotecaService;
 
     @GetMapping
-    public ResponseEntity<List<Biblioteca>> listar() {
-        List<Biblioteca> lista = bibliotecaService.listar();
+    @Operation(summary = "Listar bibliotecas", description = "Devuelve una lista de todas las bibliotecas")
+    public ResponseEntity<List<BibliotecaResponseDto>> listar() {
+        List<BibliotecaResponseDto> lista = bibliotecaService.listar();
         if (lista.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
@@ -34,22 +39,27 @@ public class BibliotecaController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Biblioteca> obtenerPorId(@PathVariable Integer id) {
+    @Operation(summary = "Obtener una biblioteca por ID", description = "Devuelve una biblioteca según el ID proporcionado")
+    public ResponseEntity<BibliotecaResponseDto> obtenerPorId(@PathVariable Integer id) {
         return ResponseEntity.ok(bibliotecaService.buscarPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<Biblioteca> crear(@RequestBody Biblioteca biblioteca) {
-        Biblioteca nueva = bibliotecaService.crear(biblioteca);
+    @Operation(summary = "Crear una biblioteca", description = "Crea una biblioteca")
+    public ResponseEntity<BibliotecaResponseDto> crear(@RequestBody Biblioteca biblioteca) {
+        BibliotecaResponseDto nueva = bibliotecaService.crear(biblioteca);
         return ResponseEntity.status(HttpStatus.CREATED).body(nueva);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Biblioteca> actualizar(@PathVariable Integer id, @RequestBody Biblioteca biblioteca) {
+    @Operation(summary = "Actualizar una biblioteca por ID", description = "Actualiza una biblioteca según el ID proporcionado")
+    public ResponseEntity<BibliotecaResponseDto> actualizar(@PathVariable Integer id,
+            @RequestBody Biblioteca biblioteca) {
         return ResponseEntity.ok(bibliotecaService.actualizar(id, biblioteca));
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar una biblioteca por ID", description = "Elimina una biblioteca según el ID proporcionado")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         bibliotecaService.eliminar(id);
         return ResponseEntity.noContent().build();

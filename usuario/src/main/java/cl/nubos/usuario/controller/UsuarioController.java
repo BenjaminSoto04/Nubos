@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.nubos.usuario.model.Usuario;
 import cl.nubos.usuario.service.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
+@Tag(name = "Usuario", description = "Operaciones con usuarios")
 public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
 
     @GetMapping
+    @Operation(summary = "Obtener todos los usuarios", description = "Devuelve una lista de todos los usuarios")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Usuario>> listar() {
         List<Usuario> usuarios = usuarioService.listarUsuarios();
@@ -38,6 +42,7 @@ public class UsuarioController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener un usuario por ID", description = "Devuelve un usuario según el ID proporcionado")
     public ResponseEntity<Usuario> obtenerPorId(@PathVariable Integer id) {
         try {
             Usuario usuario = usuarioService.buscarUsuarioPorId(id);
@@ -48,6 +53,7 @@ public class UsuarioController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear un nuevo usuario", description = "Crea un nuevo usuario")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
         Usuario nuevoUsuario = usuarioService.crearUsuario(usuario);
@@ -55,6 +61,7 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar un usuario por ID", description = "Actualiza un usuario según el ID proporcionado")
     public ResponseEntity<Usuario> actualizar(@PathVariable Integer id, @RequestBody Usuario usuario) {
         try {
             Usuario usuarioActualizado = usuarioService.actualizarUsuario(id, usuario);
@@ -65,6 +72,7 @@ public class UsuarioController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar un usuario por ID", description = "Elimina un usuario según el ID proporcionado")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         try {
             usuarioService.eliminarUsuario(id);

@@ -11,5 +11,5 @@ public class DesarrolladorDto {
     private Integer id;
     private String nombre;
     private String estudio;
-    private String email;
+    private String correo;
 }

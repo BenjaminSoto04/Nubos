@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import cl.nubos.promocion.client.VideojuegoClient;
+import cl.nubos.promocion.dto.PromocionResponseDto;
+import cl.nubos.promocion.dto.VideojuegoDto;
 import cl.nubos.promocion.model.Promocion;
 import cl.nubos.promocion.repository.PromocionRepository;
 import feign.FeignException;
@@ -21,34 +23,39 @@ public class PromocionService {
     @Autowired
     private VideojuegoClient videojuegoClient;
 
-    public List<Promocion> listar() {
-        return promocionRepository.findAll();
+    public List<PromocionResponseDto> listar() {
+        return promocionRepository.findAll().stream()
+                .map(this::mapearAPromocionResponseDto)
+                .toList();
     }
 
-    public Promocion buscarPorId(Integer id) {
-        return promocionRepository.findById(id)
+    public PromocionResponseDto buscarPorId(Integer id) {
+        Promocion promocion = promocionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Promocion no encontrada"));
+        return mapearAPromocionResponseDto(promocion);
     }
 
-    public Promocion crear(Promocion promocion) {
-        validarVideojuego(promocion.getVideojuegoId());
-        return promocionRepository.save(promocion);
+    public PromocionResponseDto crear(Promocion promocion) {
+        validarVideojuego(promocion.getVideojuego());
+        Promocion guardada = promocionRepository.save(promocion);
+        return mapearAPromocionResponseDto(guardada);
     }
 
-    public Promocion actualizar(Integer id, Promocion promocionActualizada) {
+    public PromocionResponseDto actualizar(Integer id, Promocion promocionActualizada) {
         Promocion promocion = promocionRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Promocion no encontrada"));
 
-        validarVideojuego(promocionActualizada.getVideojuegoId());
+        validarVideojuego(promocionActualizada.getVideojuego());
 
-        promocion.setVideojuegoId(promocionActualizada.getVideojuegoId());
+        promocion.setVideojuego(promocionActualizada.getVideojuego());
         promocion.setPorcentajeDescuento(promocionActualizada.getPorcentajeDescuento());
         promocion.setFechaInicio(promocionActualizada.getFechaInicio());
         promocion.setFechaFin(promocionActualizada.getFechaFin());
         promocion.setCodigoPromocional(promocionActualizada.getCodigoPromocional());
         promocion.setActiva(promocionActualizada.getActiva());
 
-        return promocionRepository.save(promocion);
+        Promocion guardada = promocionRepository.save(promocion);
+        return mapearAPromocionResponseDto(guardada);
     }
 
     public void eliminar(Integer id) {
@@ -58,12 +65,30 @@ public class PromocionService {
         promocionRepository.deleteById(id);
     }
 
-    private void validarVideojuego(Integer videojuegoId) {
+    public PromocionResponseDto mapearAPromocionResponseDto(Promocion promocion) {
+        PromocionResponseDto dto = new PromocionResponseDto();
+        dto.setId(promocion.getId());
+        dto.setPorcentajeDescuento(promocion.getPorcentajeDescuento());
+        dto.setFechaInicio(promocion.getFechaInicio());
+        dto.setFechaFin(promocion.getFechaFin());
+        dto.setCodigoPromocional(promocion.getCodigoPromocional());
+        dto.setActiva(promocion.getActiva());
+
         try {
-            videojuegoClient.obtenerPorId(videojuegoId);
+            dto.setVideojuego(videojuegoClient.obtenerPorId(promocion.getVideojuego()));
+        } catch (Exception e) {
+            dto.setVideojuego(null);
+        }
+
+        return dto;
+    }
+
+    private void validarVideojuego(Integer videojuego) {
+        try {
+            videojuegoClient.obtenerPorId(videojuego);
         } catch (FeignException.NotFound e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,
-                    "Videojuego con id " + videojuegoId + " no existe");
+                    "Videojuego con id " + videojuego + " no existe");
         } catch (FeignException e) {
             throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE,
                     "Servicio videojuego no disponible");

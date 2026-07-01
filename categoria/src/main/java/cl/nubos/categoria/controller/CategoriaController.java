@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import cl.nubos.categoria.model.Categoria;
 import cl.nubos.categoria.service.CategoriaService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/v1/categorias")
+@Tag(name = "Categoria", description = "Operaciones con categorias")
 public class CategoriaController {
 
     @Autowired
     private CategoriaService categoriaService;
 
     @GetMapping
+    @Operation(summary = "Obtener todas las categorias", description = "Devuelve una lista de todas las categorias")
     public ResponseEntity<List<Categoria>> listar() {
         List<Categoria> lista = categoriaService.listar();
         if (lista.isEmpty()) {
@@ -35,6 +39,7 @@ public class CategoriaController {
     }
 
     @GetMapping("/{id}")
+    @Operation(summary = "Obtener una categoria por ID", description = "Devuelve una categoria según el ID proporcionado")
     public ResponseEntity<Categoria> obtenerPorId(@PathVariable Integer id) {
         try {
             return ResponseEntity.ok(categoriaService.buscarPorId(id));
@@ -44,6 +49,7 @@ public class CategoriaController {
     }
 
     @PostMapping
+    @Operation(summary = "Crear una nueva categoria", description = "Crea una nueva categoria")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Categoria> crear(@RequestBody Categoria categoria) {
         Categoria nueva = categoriaService.crear(categoria);
@@ -51,6 +57,7 @@ public class CategoriaController {
     }
 
     @PutMapping("/{id}")
+    @Operation(summary = "Actualizar una categoria por ID", description = "Actualiza una categoria según el ID proporcionado")
     public ResponseEntity<Categoria> actualizar(@PathVariable Integer id, @RequestBody Categoria categoria) {
         try {
             return ResponseEntity.ok(categoriaService.actualizar(id, categoria));
@@ -60,6 +67,7 @@ public class CategoriaController {
     }
 
     @DeleteMapping("/{id}")
+    @Operation(summary = "Eliminar una categoria por ID", description = "Elimina una categoria según el ID proporcionado")
     public ResponseEntity<Void> eliminar(@PathVariable Integer id) {
         try {
             categoriaService.eliminar(id);
