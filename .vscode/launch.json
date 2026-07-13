@@ -1,0 +1,127 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-EurekaServerApplication<eureka-server>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.eureka_server.EurekaServerApplication",
+            "projectName": "eureka-server",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=54311 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=eureka-server"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-DesarrolladorApplication<desarrollador>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.desarrollador.DesarrolladorApplication",
+            "projectName": "desarrollador",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52931 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=desarrollador"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-GatewayApplication<gateway>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.gateway.GatewayApplication",
+            "projectName": "gateway",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52910 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=gateway"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-SoporteApplication<soporte>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.soporte.SoporteApplication",
+            "projectName": "soporte",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-UsuarioApplication<usuario>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.usuario.UsuarioApplication",
+            "projectName": "usuario",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CategoriaApplication<categoria>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.categoria.CategoriaApplication",
+            "projectName": "categoria",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-VideojuegoApplication<videojuego>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.videojuego.VideojuegoApplication",
+            "projectName": "videojuego",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CompraApplication<compra>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.compra.CompraApplication",
+            "projectName": "compra",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-ResenaApplication<resena>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.resena.ResenaApplication",
+            "projectName": "resena",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BibliotecaApplication<biblioteca>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.biblioteca.BibliotecaApplication",
+            "projectName": "biblioteca",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-CarritoApplication<carrito>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.carrito.CarritoApplication",
+            "projectName": "carrito",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-PromocionApplication<promocion>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "cl.nubos.promocion.PromocionApplication",
+            "projectName": "promocion",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

@@ -46,6 +46,9 @@ public class DesarrolladorController {
     public ResponseEntity<Desarrollador> obtenerPorId(@PathVariable Integer id) {
         try {
             Desarrollador desarrollador = desarrolladorService.getDesarrolladorById(id);
+            if (desarrollador == null) {
+                return ResponseEntity.notFound().build();
+            }
             return ResponseEntity.ok(desarrollador);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();

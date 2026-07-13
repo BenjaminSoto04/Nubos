@@ -1,5 +1,7 @@
 package cl.nubos.desarrollador.controller;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -119,7 +121,7 @@ public class DesarrolladorControllerTest {
 
     @Test
     void noActualizarDesarrollador() throws Exception {
-        when(desarrolladorService.updateDesarrollador(9, desarrollador)).thenThrow(RuntimeException.class);
+        when(desarrolladorService.updateDesarrollador(eq(9), any(Desarrollador.class))).thenThrow(RuntimeException.class);
         mockMvc.perform(put("/api/v1/desarrolladores/9").contentType("application/json")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -136,6 +138,24 @@ public class DesarrolladorControllerTest {
     @Test
     void noEliminarDesarrollador() throws Exception {
         doThrow(RuntimeException.class).when(desarrolladorService).deleteDesarrollador(9);
-        mockMvc.perform(delete("/api/v1/desarrolladores/1")).andExpect(status().isNotFound());
+        mockMvc.perform(delete("/api/v1/desarrolladores/9")).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void obtenerDesarrolladorDTO() throws Exception {
+        when(desarrolladorService.getDesarrolladorById(1)).thenReturn(desarrollador);
+        mockMvc.perform(get("/api/v1/desarrolladores/1")).andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(1))
+                .andExpect(jsonPath("$.nombre").value("Juan"))
+                .andExpect(jsonPath("$.estudio").value("Team Cherry"))
+                .andExpect(jsonPath("$.correo").value("juarry@gmail.com"))
+                .andExpect(jsonPath("$.país").value("Chile"))
+                .andExpect(jsonPath("$.contraseña").value("password"));
+    }
+
+    @Test
+    void noObtenerDesarrolladorDTO() throws Exception {
+        when(desarrolladorService.getDesarrolladorById(9)).thenReturn(null);
+        mockMvc.perform(get("/api/v1/desarrolladores/9")).andExpect(status().isNotFound());
     }
 }
